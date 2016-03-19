@@ -5,20 +5,18 @@ class AzCliCommandParser(argparse.ArgumentParser):
     def __init__(self, **kwargs):
         super(AzCliCommandParser, self).__init__(**kwargs)
         self.subparsers = {}
-
+        self.parents = kwargs.get('parents', None) 
+        
     def load_command_table(self, command_table):
         if not self.subparsers:
             self.subparsers = {(): self.add_subparsers()}
 
         for handler, metadata in command_table.items():
             subparser = self._get_subparser(metadata.name.split())
-            command_parser = subparser.add_parser(metadata.name.split()[-1])
+            command_parser = subparser.add_parser(metadata.name.split()[-1], parents=self.parents)
             for arg in metadata.options:
                 command_parser.add_argument(*arg.name.split(),
-                                            type=arg.type or str,
-                                            dest=arg.dest or arg.name.split()[0],
-                                            action=arg.action,
-                                            default=arg.default(arg) if callable(arg.default) else arg.default
+                                            **arg
                                             )
             command_parser.set_defaults(func=handler)
 

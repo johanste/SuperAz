@@ -7,15 +7,12 @@ class Command(object):
         self.func = kwargs.pop('func', None)
         self.options = kwargs.pop('options', [])
 
-class Option(object):
+class Option(dict):
     def __init__(self, name, **kwargs):
+        super(Option, self).__init__()
         self.name = name
-        self.help = kwargs.pop('help', None)
-        self.type = kwargs.pop('type', None)
-        self.action= kwargs.pop('action', None)
-        self.dest = kwargs.pop('dest', None)
-        self.default = kwargs.pop('default', None)
-
+        self.update(kwargs)
+       
 class CommandTable(dict):
 
     def __init__(self):
