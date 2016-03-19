@@ -19,12 +19,13 @@ class Application(object):
 
     def __init__(self, session=None):
         self.session = session or Session()
-   
+        self.session.register('GlobalParser.Created', self._register_builtin_globals)
+        
     def execute(self, argv):   
-        global_parser = AzCliCommandParser()
+        global_parser = AzCliCommandParser(add_help=False)
         self.session.raise_event('GlobalParser.Created', global_parser)
         
-        parser = AzCliCommandParser()
+        parser = AzCliCommandParser(parents = [global_parser])
         self.session.raise_event('CommandParser.Created', parser)
         
         parser.load_command_table(builtin_command_table())
@@ -37,3 +38,6 @@ class Application(object):
             args.func(args)
         except Exception as e:
             print(e)
+            
+    def _register_builtin_globals(self, name, parser):  
+        parser.add_argument('--subscription', dest='subscription_id')
