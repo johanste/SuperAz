@@ -2,7 +2,8 @@
 # PYTHON_ARGCOMPLETE_OK
 
 import sys
-from cli.main import run
-
+from cli.application import Application
+    
 if __name__=='__main__':
-    run(sys.argv[1:])
+    app = Application()
+    app.execute(sys.argv[1:])

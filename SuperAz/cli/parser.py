@@ -1,8 +1,4 @@
 import argparse
-from .builtin_commands import command_table as builtin_command_table
-import commands.vm
-import json
-import argcomplete
 
 class AzCliCommandParser(argparse.ArgumentParser):
 
@@ -39,13 +35,3 @@ class AzCliCommandParser(argparse.ArgumentParser):
     def error(self, message):
         raise ValueError(message)
 
-def run(argv):
-    parser = AzCliCommandParser()
-    parser.load_command_table(builtin_command_table)
-    parser.load_command_table(commands.vm.command_table)
-    argcomplete.autocomplete(parser)
-    try:
-        args = parser.parse_args(argv)
-        args.func(args)
-    except Exception as e:
-        print(e)
