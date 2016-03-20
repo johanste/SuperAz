@@ -42,4 +42,4 @@ class Application(object):
     def _register_builtin_arguments(self, name, parser):  
         parser.add_argument('--subscription', dest='subscription_id')
         parser.add_argument('--query', dest='_jmespath_query', metavar='QUERY STRING')
-        parser.add_argument('--output', dest='_output_format', choices=['table', 'json'], action=OutputFormatAction(self.session))
+        parser.add_argument('--output', dest='_output_format', choices=['table', 'json'])

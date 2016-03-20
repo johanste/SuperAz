@@ -14,7 +14,7 @@ class AzCliCommandParser(argparse.ArgumentParser):
         for handler, metadata in command_table.items():
             subparser = self._get_subparser(metadata.name.split())
             command_parser = subparser.add_parser(metadata.name.split()[-1], parents=self.parents)
-            session.raise_event('AzCliCommandParser.SubparserCreated', {'parser': parser, 'metadata': metadata})
+            session.raise_event('AzCliCommandParser.SubparserCreated', {'parser': command_parser, 'metadata': metadata})
             for arg in metadata.options:
                 command_parser.add_argument(*arg.name.split(),
                                             **arg)
