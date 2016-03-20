@@ -19,7 +19,7 @@ class Application(object):
 
     def __init__(self, session=None):
         self.session = session or Session()
-        self.session.register('GlobalParser.Created', self._register_builtin_globals)
+        self.session.register('GlobalParser.Created', self._register_builtin_arguments)
         
     def execute(self, argv):   
         global_parser = AzCliCommandParser(add_help=False)
@@ -28,8 +28,8 @@ class Application(object):
         parser = AzCliCommandParser(parents = [global_parser])
         self.session.raise_event('CommandParser.Created', parser)
         
-        parser.load_command_table(builtin_command_table())
-        parser.load_command_table(commands.vm.load_command_table())
+        parser.load_command_table(self.session, builtin_command_table())
+        parser.load_command_table(self.session, commands.vm.load_command_table())
 
         self.session.raise_event('CommandParser.Loaded', parser)
         argcomplete.autocomplete(parser)
@@ -39,5 +39,7 @@ class Application(object):
         except Exception as e:
             print(e)
             
-    def _register_builtin_globals(self, name, parser):  
+    def _register_builtin_arguments(self, name, parser):  
         parser.add_argument('--subscription', dest='subscription_id')
+        parser.add_argument('--query', dest='_jmespath_query', metavar='QUERY STRING')
+        parser.add_argument('--output', dest='_output_format', choices=['table', 'json'], action=OutputFormatAction(self.session))
