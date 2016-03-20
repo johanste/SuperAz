@@ -13,3 +13,10 @@ command_table = CommandTable()
 def vm_list_command(self):
     print('vm list command:')
     print(self)
+
+@command_table.option('--vm-name -n', dest='vm_name', required=True)
+@command_table.option('--resourcegroup', dest='resource_group', help='This is the help for resource group')
+@command_table.command('vm delete')
+def vm_delete_command(self):
+    print('vm delete command:')
+    print(self)

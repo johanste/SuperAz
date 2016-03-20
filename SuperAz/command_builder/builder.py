@@ -1,10 +1,8 @@
-from collections import defaultdict
-
 class Command(object):
 
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, func, **kwargs):
         self.name = name
-        self.func = kwargs.pop('func', None)
+        self.func = func
         self.options = kwargs.pop('options', [])
 
 class Option(dict):
@@ -12,7 +10,7 @@ class Option(dict):
         super(Option, self).__init__()
         self.name = name
         self.update(kwargs)
-       
+
 class CommandTable(dict):
 
     def __init__(self):
@@ -20,7 +18,7 @@ class CommandTable(dict):
 
     def command(self, name, **kwargs):
         def wrapper(func):
-            self[func] = Command(name=name, **kwargs)
+            self[func] = Command(name, func, **kwargs)
             return func
         return wrapper
 
